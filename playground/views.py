@@ -11,3 +11,5 @@ def calculate():
 def say_hello(request):
     x = calculate()
     return render(request, 'hello.html', {'name': 'Saeed'})
+def what(request):
+    return HttpResponse('WHAT THE FUCH DO YOU WANT?')
