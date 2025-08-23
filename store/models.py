@@ -11,10 +11,11 @@ class Collection(models.Model):
                                          related_name='+')
 
 class Product(models.Model):
+    slug = models.SlugField(null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     inventory = models.IntegerField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion)
@@ -34,6 +35,8 @@ class Customer(models.Model):
     phone = models.CharField(max_length=255)
     birth_date = models.DateTimeField(auto_now=True)
     membership = models.CharField(max_length=1, choices=MEMBERSHIP_STATUS, default=MEMBERSHIP_BRONZ)
+    class Meta:
+        pass
 
 class Order(models.Model):
     PAYMENT_PENDING = 'P'
