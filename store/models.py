@@ -5,10 +5,17 @@ class Promotion(models.Model):
     description = models.CharField(max_length=255)
     discount = models.FloatField() 
     # product_user
+
 class Collection(models.Model):
     title = models.CharField(max_length=255)
     featured_product = models.ForeignKey("Product", on_delete=models.SET_NULL, null=True,
                                          related_name='+')
+    
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 class Product(models.Model):
     slug = models.SlugField(null=True)
@@ -19,6 +26,12 @@ class Product(models.Model):
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['title']
 
 class Customer(models.Model):
     MEMBERSHIP_BRONZ = 'B'
@@ -35,8 +48,12 @@ class Customer(models.Model):
     phone = models.CharField(max_length=255)
     birth_date = models.DateTimeField(auto_now=True)
     membership = models.CharField(max_length=1, choices=MEMBERSHIP_STATUS, default=MEMBERSHIP_BRONZ)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+    
     class Meta:
-        pass
+        ordering = ['-last_name', '-first_name']
 
 class Order(models.Model):
     PAYMENT_PENDING = 'P'
@@ -68,4 +85,3 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-
